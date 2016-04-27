@@ -1,0 +1,5 @@
+Flask
+Jinja2
+Werkzeug
+distribute
+wsgiref
