@@ -1,8 +1,8 @@
-# Grab the latest alpine image
+#Grab the latest alpine image
 FROM alpine:latest
 
 # Install python and pip
-RUN apk add --update python py-pip 
+RUN apk add --update python py-pip bash 
 ADD ./webapp/requirements.txt /tmp/requirements.txt
 
 # Install dependencies
@@ -16,5 +16,5 @@ WORKDIR /opt/webapp
 EXPOSE 5000 		
 
 # Run the app			
-CMD ["python", "app.py"]
+CMD ["python -m", "SimpleHTTPServer $PORT"]
 
