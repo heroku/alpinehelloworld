@@ -1,4 +1,4 @@
-#Grab the latest alpine image
+# Grab the latest alpine image
 FROM alpine:latest
 
 # Install python and pip
@@ -16,5 +16,5 @@ WORKDIR /opt/webapp
 EXPOSE 5000 		
 
 # Run the app			
-CMD ["python -m", "SimpleHTTPServer $PORT"]
+CMD ["python", "app.py"]
 
