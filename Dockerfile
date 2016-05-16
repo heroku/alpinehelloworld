@@ -12,7 +12,7 @@ RUN pip install -qr /tmp/requirements.txt
 ADD ./webapp /opt/webapp/
 WORKDIR /opt/webapp
 
-# Expose is not supported
+# Expose is not supported by Heroku
 EXPOSE 5000 		
 
 # Run the app			
