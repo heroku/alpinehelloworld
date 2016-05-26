@@ -12,9 +12,9 @@ RUN pip install -qr /tmp/requirements.txt
 ADD ./webapp /opt/webapp/
 WORKDIR /opt/webapp
 
-# Expose is not supported by Heroku
-EXPOSE 5000 		
+# Expose is NOT supported by Heroku.  $PORT read from environment in app.py
+# EXPOSE 5000 		
 
-# Run the app			
-CMD ["python", "app.py"]
+# Run the app.  CMD is required to run on Heroku			
+CMD ["python","app.py"]
 
