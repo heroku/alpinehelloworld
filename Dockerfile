@@ -1,4 +1,4 @@
-# Grab the latest alpine image
+#Grab the latest alpine image
 FROM alpine:latest
 
 # Install python and pip
@@ -12,9 +12,10 @@ RUN pip install -qr /tmp/requirements.txt
 ADD ./webapp /opt/webapp/
 WORKDIR /opt/webapp
 
-# Expose is NOT supported by Heroku.  $PORT read from environment in app.py
+# Expose is NOT supported by Heroku
 # EXPOSE 5000 		
 
-# Run the app.  CMD is required to run on Heroku			
-CMD ["python","app.py"]
+# Run the app.  CMD is required to run on Heroku
+# $PORT is set by Heroku			
+CMD gunicorn --bind 0.0.0.0:$PORT wsgi 
 
