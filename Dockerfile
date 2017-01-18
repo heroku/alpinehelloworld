@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Install python and pip
-RUN apk add --update python py-pip bash 
+RUN apk add --update python py2-pip bash 
 ADD ./webapp/requirements.txt /tmp/requirements.txt
 
 # Install dependencies
