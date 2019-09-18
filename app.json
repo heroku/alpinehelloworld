@@ -15,5 +15,13 @@
   "name": "dkr101-helloworld",
   "scripts": {
   },
-  "stack": "container"
+  "stack": "container",
+
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "python3 tests.py"
+      }
+    }
+  }
 }
