@@ -1,0 +1,10 @@
+{
+  "name": "alpine hello world",
+  "description": "Go Getting Started Example App",
+  "keywords": ["getting-started", "go", "sample", "example"],
+  "website": "http://github.com/heroku/go-getting-started",
+  "repository": "http://github.com/heroku/go-getting-started",
+  "scripts": {
+    "postdeploy": "bash ./exit1.sh"
+  }
+}
