@@ -4,6 +4,11 @@
   "keywords": ["getting-started", "go", "sample", "example"],
   "website": "http://github.com/heroku/go-getting-started",
   "repository": "http://github.com/heroku/go-getting-started",
+  "buildpacks": [
+    {
+      "url": "heroku/go"
+    }
+  ],
   "scripts": {
     "postdeploy": "bash ./exit1.sh"
   }
