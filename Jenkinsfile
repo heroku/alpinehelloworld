@@ -91,7 +91,7 @@ pipeline {
 
      stage('Push image in production and deploy it') {
        when {
-              expression { GIT_BRANCH == 'origin/prod' }
+              expression { GIT_BRANCH == 'origin/production' }
             }
       agent any
       environment {
