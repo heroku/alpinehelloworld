@@ -22,7 +22,7 @@ pipeline {
            agent any
            steps {
               script {
-                sh 'docker build -t ${votre_id_dockerhub}/${IMAGE_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t ${DOCKERHUB_ID}/${IMAGE_NAME}:${IMAGE_TAG} .'
               }
            }
        }
@@ -32,7 +32,7 @@ pipeline {
             script {
               sh '''
                 docker rm -f ${IMAGE_NAME}
-                docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${votre_id_dockerhub}/${IMAGE_NAME}:${IMAGE_TAG} 
+                docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${DOCKERHUB_ID}/${IMAGE_NAME}:${IMAGE_TAG} 
                 sleep 5
               '''
              }
