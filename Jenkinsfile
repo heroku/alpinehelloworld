@@ -5,10 +5,10 @@ pipeline {
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
     }
-            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
-                }
-            }
+    withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
+        }
+    }
 
     agent none
 
