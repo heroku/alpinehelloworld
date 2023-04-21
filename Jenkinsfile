@@ -4,11 +4,12 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
+        COMPANY_NAME = "abdelhad"
     }
-    withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
-        }
-    }
+//    withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+//        withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
+//        }
+//    }
 
     agent none
 
@@ -46,11 +47,13 @@ pipeline {
             }
             agent any
             steps {
-                sh '''
-                    docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    docker login -u ${DOCKER_USERNAME} -p ${PASSWORD}
-                    docker push ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                '''
+                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                        docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                        docker login -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
+                        docker push ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    '''
+                }
             }
         }
         stage('Remove docker cache') {
@@ -69,7 +72,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${STAGING} ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 80:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     lt --port 8080 --subdomain ${STAGING}
                 '''
             }
@@ -90,7 +93,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${PRODUCTION} ${DOCKER_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 80:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     lt --port 8080 --subdomain ${PRODUCTION}
                 '''
             }
