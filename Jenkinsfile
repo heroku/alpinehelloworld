@@ -1,10 +1,10 @@
 pipeline {
     environment {
-        IMAGE_NAME = alpinehelloworld
-        IMAGE_TAG = latest
+        IMAGE_NAME = "alpinehelloworld"
+        IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-            withCredentials([usernamePassword(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 withEnv(["COMPANY_NAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
                 }
             }
