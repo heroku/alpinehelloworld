@@ -72,8 +72,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    lt --port 8080 --subdomain ${STAGING}
+                    docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    lt --port 81 --subdomain ${STAGING}
                 '''
             }
         }
@@ -93,8 +93,8 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    lt --port 8080 --subdomain ${PRODUCTION}
+                    docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    lt --port 82 --subdomain ${PRODUCTION}
                 '''
             }
         }
