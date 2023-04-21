@@ -5,7 +5,8 @@ pipeline {
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
             withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                withEnv(["COMPANY_NAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
+                withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
+                    COMPANY_NAME = USERNAME
                 }
             }
     }
