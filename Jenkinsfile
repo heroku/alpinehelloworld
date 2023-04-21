@@ -4,9 +4,8 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
-                    COMPANY_NAME = USERNAME
+            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withEnv(["COMPANY_USERNAME=${DOCKER_USERNAME}", "PASSWORD=${DOCKER_PASSWORD}"]) {
                 }
             }
     }
@@ -47,9 +46,9 @@ pipeline {
             agent any
             steps {
                 sh '''
-                    docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    docker login -u ${COMPANY_NAME} -p ${PASSWORD}
-                    docker push ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker login -u ${COMPANY_USERNAME} -p ${PASSWORD}
+                    docker push ${COMPANY_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
                 '''
             }
         }
@@ -69,7 +68,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 80:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     lt --port 8080 --subdomain ${STAGING}
                 '''
             }
@@ -90,7 +89,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 80:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     lt --port 8080 --subdomain ${PRODUCTION}
                 '''
             }
