@@ -4,9 +4,7 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                withEnv(["DOCKER_USERNAME=${DOCKER_USERNAME}", "PASSWORD=${DOCKER_PASSWORD}"]) {
-                }
+            withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             }
     }
     agent none
