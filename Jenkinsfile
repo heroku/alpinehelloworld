@@ -26,6 +26,7 @@ pipeline {
                 sh '''
                     docker container prune -f
                     docker rm -f ${IMAGE_NAME}
+                    docker rm -f ${COMPANY_NAME}/${IMAGE_NAME}
                     docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 5
                 '''
