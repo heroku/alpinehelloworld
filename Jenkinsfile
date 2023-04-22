@@ -6,10 +6,6 @@ pipeline {
         PRODUCTION = "doukanifr-production"
         COMPANY_NAME = "abdelhad"
     }
-//    withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-//        withEnv(["USERNAME=${USERNAME}", "PASSWORD=${PASSWORD}"]) {
-//        }
-//    }
 
     agent none
 
@@ -30,7 +26,7 @@ pipeline {
                     sleep 5
                 '''
             }
-        } 
+        }
         stage('Test application') {
             agent any
             steps {
