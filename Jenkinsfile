@@ -4,7 +4,6 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-        COMPANY_NAME = "abdelhad"
     }
 
     agent none
@@ -13,7 +12,9 @@ pipeline {
         stage('Build image') {
             agent any
             steps {
+                withCredentials([string(credentialsId: 'my_dockerhub', variable: 'DOCKER_PASSWORD')]) {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                }
             }
         }
         stage('Run container') {
@@ -45,7 +46,8 @@ pipeline {
             }
             agent any
             steps {
-                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
+//                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
+                withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'COMPANY_NAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
                         docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                         docker login -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
