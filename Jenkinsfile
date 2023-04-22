@@ -10,18 +10,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Var testing') {
-            steps {
-                withCredentials([string(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    withEnv([
-                        "USERNAME=${env.COMPANY_NAME}",
-                        "PASSWORD=${env.PASSWORD}"
-                ]) {
-                sh 'echo ${USERNAME}; echo ${PASSWORD}'
-                    }
-                }
-            }
-        }
         stage('Build image') {
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
