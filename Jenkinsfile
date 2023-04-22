@@ -4,7 +4,7 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-//        COMPANY_NAME = "abdelhad"
+        COMPANY_NAME = "abdelhad"
     }
 
     agent any
@@ -12,9 +12,12 @@ pipeline {
     stages {
         stage('Var testing') {
             steps {
-                withEnv(['COMPANY_NAME=${COMPANY_NAME}', 'DOCKER_PASSWORD=${DOCKER_PASSWORD}']){
-                    withCredentials([string(credentialsId: 'my_dockerhub', usernameVariable: 'COMPANY_NAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                sh 'echo ${COMPANY_NAME}; echo ${DOCKER_PASSWORD}'
+                withCredentials([string(credentialsId: 'my_dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withEnv([
+                        "USERNAME=${env.COMPANY_NAME}",
+                        "PASSWORD=${env.PASSWORD}"
+                ]) {
+                sh 'echo ${USERNAME}; echo ${PASSWORD}'
                     }
                 }
             }
