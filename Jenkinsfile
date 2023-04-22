@@ -4,21 +4,27 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
+//        COMPANY_NAME = "abdelhad"
     }
 
-    agent none
+    agent any
 
     stages {
-        stage('Build image') {
-            agent any
+        stage('Var testing') {
             steps {
-                withCredentials([string(credentialsId: 'my_dockerhub', variable: 'DOCKER_PASSWORD')]) {
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                withEnv(['COMPANY_NAME=${COMPANY_NAME}', 'DOCKER_PASSWORD=${DOCKER_PASSWORD}']){
+                    withCredentials([string(credentialsId: 'my_dockerhub', usernameVariable: 'COMPANY_NAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                sh 'echo ${COMPANY_NAME}; echo ${DOCKER_PASSWORD}'
+                    }
                 }
             }
         }
+        stage('Build image') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+            }
+        }
         stage('Run container') {
-            agent any
             steps {
                 sh '''
                     docker container prune -f
@@ -29,13 +35,11 @@ pipeline {
             }
         }
         stage('Test application') {
-            agent any
             steps {
                 sh 'curl http://192.168.56.12 | grep -q "Hello world!"'
             }
         }
         stage('Clean environment') {
-            agent any
             steps {
                 sh 'docker rm -f ${IMAGE_NAME}'
             }
@@ -44,10 +48,8 @@ pipeline {
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
-            agent any
             steps {
-//                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
-                withCredentials([dockerhubcreds(credentialsId: 'my_dockerhub', usernameVariable: 'COMPANY_NAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
                     sh '''
                         docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                         docker login -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
@@ -57,7 +59,6 @@ pipeline {
             }
         }
         stage('Remove docker cache') {
-            agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
@@ -66,7 +67,6 @@ pipeline {
             }
         }
         stage('Deploy staging app') {
-            agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
@@ -78,8 +78,7 @@ pipeline {
                 '''
             }
         }
-        stage('Test staging app') {
-            agent any
+        stage('Check staging app') {
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
@@ -88,7 +87,6 @@ pipeline {
             }
         }
         stage('Deploy production app') {
-            agent any
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
@@ -100,8 +98,7 @@ pipeline {
                 '''
             }
         }
-        stage('Test production app') {
-            agent any
+        stage('Check production app') {
             when {
                 expression { GIT_BRANCH == 'origin/master' }
             }
