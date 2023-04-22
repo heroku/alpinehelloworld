@@ -73,8 +73,9 @@ pipeline {
             }
             steps {
                 sh '''
+                    docker rm -f ${STAGING}
                     docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    lt --port 81 --subdomain ${STAGING}
+                    sleep 5
                 '''
             }
         }
@@ -94,8 +95,9 @@ pipeline {
             }
             steps {
                 sh '''
+                    docker rm -f ${PRODUCTION}
                     docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    lt --port 82 --subdomain ${PRODUCTION}
+                    sleep 5
                 '''
             }
         }
