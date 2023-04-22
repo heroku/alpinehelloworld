@@ -76,7 +76,7 @@ pipeline {
                 sh '''
                     docker rm -f ${STAGING}
                     docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    sleep 5
+                    sleep 10
                 '''
             }
         }
@@ -86,7 +86,7 @@ pipeline {
                 expression { GIT_BRANCH == 'origin/master' }
             }
             steps {
-                sh 'sh curl https://${STAGING}.loca.lt | grep -q "Hello world!"'
+                sh 'curl https://${STAGING}.loca.lt | grep -q "Hello world!"'
             }
         }
         stage('Deploy production app') {
@@ -98,7 +98,7 @@ pipeline {
                 sh '''
                     docker rm -f ${PRODUCTION}
                     docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                    sleep 5
+                    sleep 10
                 '''
             }
         }
@@ -108,7 +108,7 @@ pipeline {
                 expression { GIT_BRANCH == 'origin/master' }
             }
             steps {
-                sh 'sh curl https://${PRODUCTION}.loca.lt | grep -q "Hello world!"'
+                sh 'curl https://${PRODUCTION}.loca.lt | grep -q "Hello world!"'
             }
         }
     }
