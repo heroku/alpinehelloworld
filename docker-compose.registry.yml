@@ -1,0 +1,25 @@
+version: '3.3'
+services:
+  doukanifr-registry:
+    image: registry:2.8.1
+    container_name: doukanifr-registry
+    restart: always
+    ports: 
+      - "5000:5000"
+    volumes:
+      - /opt/docker/registry:/var/lib/registry
+      - ./registry/auth:/auth
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_AUTH=htpasswd
+      - "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"
+      - REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+    command:
+      - /bin/sh
+      - -c
+      - 'apk add --no-cache apache2-utils && htpasswd -Bbn doukanifr change-me > /auth/htpasswd && registry serve /etc/docker/registry/config.yml'
+    networks:
+      - doukanifr_reg.network
+
+networks:
+  doukanifr_reg.network:
