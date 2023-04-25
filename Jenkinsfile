@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Test application') {
           steps {
-            sh "curl http://192.168.56.12 | grep -q 'Hello world!'"
+            sh "curl http://192.168.56.12:83 | grep -q 'Hello world!'"
           }
         }
         stage('Clean environment') {
