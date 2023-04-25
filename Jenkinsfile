@@ -27,11 +27,9 @@ pipeline {
             }
         }
         stage('Test application') {
-          environment {
-            APPLICATION_IP = sh(script: 'ip -o -f inet addr show enp0s8 | awk \'{print $4}\' | cut -d \'/\' -f 1', returnStdout: true).trim()
           }
           steps {
-            sh "curl http://${APPLICATION_IP} | grep -q 'Hello world!'"
+            sh "curl http://192.168.56.12 | grep -q 'Hello world!'"
           }
         }
 
