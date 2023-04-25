@@ -21,7 +21,7 @@ pipeline {
                 sh '''
                     docker container prune -f
                     docker rm -f ${IMAGE_NAME} || echo "Ok : le conteneur ${IMAGE_NAME} est inexistant"
-                    docker run -d -p 80:5000 -e PORT=5000 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 83:5000 -e PORT=5000 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 5
                 '''
             }
@@ -29,8 +29,8 @@ pipeline {
         stage('Test application') {
             steps {
                 sh '''
-                export APPLICATION_IP="ip -o -f inet addr show enp0s8 | awk '{print $4}' | cut -d '/' -f 1"
-                curl http://${APPLICATION_IP} | grep -q "Hello world!"
+                    export APPLICATION_IP="ip -o -f inet addr show enp0s8 | awk '{print $4}' | cut -d '/' -f 1"
+                    curl http://${APPLICATION_IP} | grep -q "Hello world!"
                 '''
             }
         }
