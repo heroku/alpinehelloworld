@@ -30,7 +30,7 @@ pipeline {
             steps {
                 sh '''
                     export APPLICATION_IP=$(ip -o -f inet addr show enp0s8 | awk '{print $4}' | cut -d '/' -f 1)
-                    curl http://${APPLICATION_IP} | grep -q "Hello world!"
+                    curl "http://${APPLICATION_IP}" | grep -q "Hello world!"
                 '''
             }
         }
