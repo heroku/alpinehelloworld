@@ -1,1 +1,3 @@
 .git/
+Jenkinsfile
+docker-compose.registry.yml
