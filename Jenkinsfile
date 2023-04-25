@@ -4,7 +4,8 @@ pipeline {
         IMAGE_TAG = "latest"
         STAGING = "doukanifr-staging"
         PRODUCTION = "doukanifr-production"
-        COMPANY_NAME = "abdelhad"
+        COMPANY_NAME = "doukanifr"
+        REGISTRY_DOMAIN = "registry.loca.lt"
     }
 
     agent any
@@ -40,11 +41,11 @@ pipeline {
                 expression { GIT_BRANCH == 'origin/master' }
             }
             steps {
-                withCredentials([string(credentialsId: 'pass_docker_hub', variable: 'DOCKER_PASSWORD')]) {
+                withCredentials([string(credentialsId: 'pass_private_registry', variable: 'DOCKER_PASSWORD')]) {
                     sh '''
-                        docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
-                        docker login -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
-                        docker push ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                        docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                        docker login ${REGISTRY_DOMAIN} -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
+                        docker push ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
@@ -64,7 +65,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f ${STAGING}
-                    docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 10
                 '''
             }
@@ -84,7 +85,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f ${PRODUCTION}
-                    docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 82:5000 -e PORT=5000 --name ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 10
                 '''
             }
