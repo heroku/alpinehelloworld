@@ -85,7 +85,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f ${PRODUCTION}
-                    docker run -d -p 82:5000 -e PORT=5000 --name ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+                    docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 10
                 '''
             }
