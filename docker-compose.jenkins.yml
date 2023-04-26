@@ -1,0 +1,19 @@
+version: '2'
+services:
+  jenkins:
+    image: eazytraining/jenkins
+    ports:
+      - '8080:8080'
+      - '443:8443'
+      - '50000:50000'
+    privileged: true
+    restart: always
+    volumes:
+      - 'jenkins_data:/bitnami'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'jenkins_home:/var/jenkins_home'
+volumes:
+  jenkins_data:
+    driver: local
+  jenkins_home:
+    driver: local
