@@ -41,7 +41,7 @@ pipeline {
                 expression { GIT_BRANCH == 'origin/master' }
             }
             steps {
-                withCredentials([string(credentialsId: 'pass_private_registry', variable: 'DOCKER_PASSWORD')]) {
+                withCredentials([string(credentialsId: 'private_registry_pass', variable: 'DOCKER_PASSWORD')]) {
                     sh '''
                         docker image tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                         docker login ${REGISTRY_DOMAIN} -u ${COMPANY_NAME} -p ${DOCKER_PASSWORD}
