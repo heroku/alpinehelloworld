@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh '''
                     docker container prune -f
-                    docker rm -f ${IMAGE_NAME} || echo "Ok : le conteneur ${IMAGE_NAME} est inexistant"
+                    docker ps -a | grep -i ${IMAGE_NAME} && docker rm -f ${IMAGE_NAME}
                     docker run -d -p 83:5000 -e PORT=5000 --name ${IMAGE_NAME} ${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 5
                 '''
@@ -64,7 +64,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    docker rm -f ${STAGING}
+                    docker ps -a | grep -i ${STAGING} && docker rm -f ${STAGING}
                     docker run -d -p 81:5000 -e PORT=5000 --name ${STAGING} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 10
                 '''
@@ -84,7 +84,7 @@ pipeline {
             }
             steps {
                 sh ''' 
-                    docker rm -f ${PRODUCTION}
+                    docker ps -a | grep -i ${PRODUCTION} && docker rm -f ${PRODUCTION}
                     docker run -d -p 82:5000 -e PORT=5000 --name ${PRODUCTION} ${REGISTRY_DOMAIN}/${COMPANY_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
                     sleep 20 
                 '''
