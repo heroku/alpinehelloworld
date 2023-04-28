@@ -99,4 +99,24 @@ pipeline {
             }
         }
     }
-}
+    post {
+        failure {
+            slackSend(attachments: JsonOutput.toJson([SLACK_DEFAULTS + [
+                text: SLACK_DEFAULTS['text'] + '\nFailed',
+                color: "danger",
+                thumb_url: "https://i.imgur.com/KWf2cNB.png",
+                actions: [
+                    [ type: "button", text: "Console Output", url: "${env.BUILD_URL}console" ],
+                    [ type: "button", text: "Retry", url: "${env.BUILD_URL}rebuild/parameterized?slack-autopost" ]    
+                ]
+            ]]))
+        }
+        success {
+            slackSend(attachments: JsonOutput.toJson([SLACK_DEFAULTS + [
+                text: SLACK_DEFAULTS['text'] + '\nSucceed',
+                color: "good",
+                thumb_url: "https://i.imgur.com/4u9QoDv.png"
+            ]]))
+        }
+    }
+ }
