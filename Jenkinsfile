@@ -1,3 +1,5 @@
+/* Import shared library */
+@Library('guissepm-shared-library)
 pipeline {
      environment {
        ID_DOCKER = "${ID_DOCKER_PARAMS}"
@@ -5,10 +7,10 @@ pipeline {
        IMAGE_TAG = "latest"
        // PORT_EXPOSED = "80" à paraméter dans le job obligatoirement
        APP_NAME = "guisse"
-       STG_API_ENDPOINT = "ip10-0-3-3-ciapmu7i3nvgqghmcch0-1993.direct.docker.labs.eazytraining.fr"
-       STG_APP_ENDPOINT = "ip10-0-3-3-ciapmu7i3nvgqghmcch0-80.direct.docker.labs.eazytraining.fr"
-       PROD_API_ENDPOINT = "ip10-0-3-4-ciapmu7i3nvgqghmcch0-1993.direct.docker.labs.eazytraining.fr"
-       PROD_APP_ENDPOINT = "ip10-0-3-4-ciapmu7i3nvgqghmcch0-80.direct.docker.labs.eazytraining.fr"
+       STG_API_ENDPOINT = "ip10-0-2-3-cibh2tni3nvgqghmcct0-1993.direct.docker.labs.eazytraining.fr"
+       STG_APP_ENDPOINT = "ip10-0-2-3-cibh2tni3nvgqghmcct0-80.direct.docker.labs.eazytraining.fr"
+       PROD_API_ENDPOINT = "ip10-0-2-4-cibh2tni3nvgqghmcct0-1993.direct.docker.labs.eazytraining.fr"
+       PROD_APP_ENDPOINT = "ip10-0-2-4-cibh2tni3nvgqghmcct0-80.direct.docker.labs.eazytraining.fr"
        INTERNAL_PORT = "5000"
        EXTERNAL_PORT = "${PORT_EXPOSED}"
        CONTAINER_IMAGE = "${ID_DOCKER}/${IMAGE_NAME}:${IMAGE_TAG}"
@@ -116,11 +118,9 @@ pipeline {
   }
      
   post {
-       success {
-         slackSend (color: '#00FF00', message: "GUISSE - SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) - PROD URL => http://${PROD_APP_ENDPOINT} , STAGING URL => http://${STG_APP_ENDPOINT}")
-         }
-      failure {
-            slackSend (color: '#FF0000', message: "GUISSE - FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-          }   
+       always {
+       script {
+         slackNotifier currentBuild.result
+     } 
     }     
 }
