@@ -5,10 +5,10 @@ pipeline {
        IMAGE_TAG = "latest"
        // PORT_EXPOSED = "80" à paraméter dans le job obligatoirement
        APP_NAME = "kamsu"
-       STG_API_ENDPOINT = "dev.q-bb.ca:1993"
-       STG_APP_ENDPOINT = "dev.q-bb.ca:80"
-       PROD_API_ENDPOINT = "ip10-0-2-3-cjfs1j979sugqdpn0vt0-1993.direct.docker.labs.eazytraining.fr"
-       PROD_APP_ENDPOINT = "ip10-0-2-3-cjfs1j979sugqdpn0vt0-80.direct.docker.labs.eazytraining.fr"
+       STG_API_ENDPOINT = "ip10-0-3-3-cku0bn8db1j0qechj98g-1993.direct.docker.labs.eazytraining.fr"
+       STG_APP_ENDPOINT = "ip10-0-3-3-cku0bn8db1j0qechj98g-80.direct.docker.labs.eazytraining.fr"
+       PROD_API_ENDPOINT = "ip10-0-1-3-cktdtr0db1j0qechj730-1993.direct.docker.labs.eazytraining.fr"
+       PROD_APP_ENDPOINT = "ip10-0-1-3-cktdtr0db1j0qechj730-80.direct.docker.labs.eazytraining.fr"
        INTERNAL_PORT = "5000"
        EXTERNAL_PORT = "${PORT_EXPOSED}"
        CONTAINER_IMAGE = "${ID_DOCKER}/${IMAGE_NAME}:${IMAGE_TAG}"
@@ -115,15 +115,8 @@ pipeline {
           }
         }
      }
-   }
-   post {
-       success {
-         slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) - PROD URL => http://${PROD_APP_ENDPOINT} , STAGING URL => http://${STG_APP_ENDPOINT}")
-         }
-      failure {
-            slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-          }   
-    } 
+   
+ }
+}
      
        
-}
