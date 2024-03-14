@@ -1,5 +1,5 @@
-#Grab the latest alpine image
-FROM alpine:latest
+#Grab alpine image
+FROM python:3.13.0a2-alpine
 
 # Install python and pip
 RUN apk add --no-cache --update python3 py3-pip bash
