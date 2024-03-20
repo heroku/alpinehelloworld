@@ -2,7 +2,7 @@
 FROM alpine:latest
 
 # Install python and pip
-RUN apk add --no-cache --update python3 py3-pip bash
+RUN apk add --no-cache --update python3 py3-pip bash shadow
 ADD ./webapp/requirements.txt /tmp/requirements.txt
 
 # Install dependencies
@@ -16,7 +16,7 @@ WORKDIR /opt/webapp
 # EXPOSE 5000 		
 
 # Run the image as a non-root user
-RUN adduser -D myuser
+RUN useradd myuser
 USER myuser
 
 # Run the app.  CMD is required to run on Heroku
