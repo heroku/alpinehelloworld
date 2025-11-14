@@ -6,7 +6,20 @@ RUN apk add --no-cache --update python3 py3-pip bash
 ADD ./webapp/requirements.txt /tmp/requirements.txt
 
 # Install dependencies
-RUN pip3 install --no-cache-dir -q -r /tmp/requirements.txt
+#RUN pip3 install --no-cache-dir -q -r /tmp/requirements.txt
+
+# Installer python3, pip et venv
+RUN apk add --no-cache --update python3 py3-pip py3-venv
+
+# Créer un environnement virtuel
+RUN python3 -m venv /venv
+
+# Activer l’environnement et installer les dépendances
+RUN /venv/bin/pip install --no-cache-dir -q -r /tmp/requirements.txt
+
+# Ajouter ceci pour exécuter Python avec l’environnement virtuel
+ENV PATH="/venv/bin:$PATH"
+
 
 # Add our code
 ADD ./webapp /opt/webapp/
